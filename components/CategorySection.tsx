@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { CodeCard } from "./CodeCard";
 import axios from "axios";
@@ -6,7 +6,6 @@ import axios from "axios";
 interface Code {
   id: string;
   code: string;
-  link: string;
   favorite?: boolean; // Optional field for favorite status
 }
 
@@ -23,6 +22,10 @@ export const CategorySection = ({
 }: CategorySectionProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [codesState, setCodesState] = useState(codes);
+
+  useEffect(() => {
+    setCodesState(codes);
+  }, [codes]);
 
   const handleFavClick = async (code: string) => {
     try {
@@ -64,7 +67,7 @@ export const CategorySection = ({
       </button>
 
       {isOpen && (
-        <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 px-2">
+        <div className="mt-3 grid grid-cols-1 gap-3 px-2">
           {codesState.map((code) => (
             <CodeCard
               key={code.id}

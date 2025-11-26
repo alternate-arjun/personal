@@ -1,7 +1,6 @@
 import { REDIRECT_URL_STARTS_WITH } from "@/lib/config";
-import axios from "axios";
 import { ExternalLink } from "lucide-react";
-import { Heart, LucideHeart } from "lucide-react";
+import { LucideHeart } from "lucide-react";
 
 interface CodeCardProps {
   code: string;
@@ -24,31 +23,31 @@ export const CodeCard = ({ code, link, fav, onFavClick }: CodeCardProps) => {
 
   return (
     <button
-      // onClick={handleClick}
-      className="group relative bg-code-bg border border-code-border rounded-lg p-4 hover:bg-code-hover hover:border-primary/50 transition-all duration-200 text-left"
+      onClick={handleClick}
+      className="group relative bg-code-bg border border-code-border rounded-lg p-4 hover:bg-code-hover hover:border-primary/50 transition-all duration-200 text-left hover:cursor-pointer flex justify-between"
     >
-      <div className="flex items-center justify-between gap-2">
-        <code className="text-primary font-mono font-semibold text-lg break-all">
+      <div className="flex items-center justify-between">
+        <code className="text-primary font-mono font-semibold text-lg">
           {code}
         </code>
-        <div className=" flex space-x-4 items-center justify-center">
-          {fav ? (
-            <LucideHeart
-              onClick={() => {
-                onFavClick(code);
-              }}
-              className="h-4 w-4 group-hover:text-primary transition-colors fill-pink-500 text-pink-500"
-            />
-          ) : (
-            <LucideHeart
-              onClick={() => {
-                onFavClick(code);
-              }}
-              className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-"
-            />
-          )}
-          <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
-        </div>
+      </div>
+      <div className=" flex space-x-4 items-center justify-center">
+        {fav ? (
+          <LucideHeart
+            onClick={() => {
+              onFavClick(code);
+            }}
+            className="h-4 w-4 group-hover:text-primary transition-colors fill-pink-500 text-pink-500"
+          />
+        ) : (
+          <LucideHeart
+            onClick={() => {
+              onFavClick(code);
+            }}
+            className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-"
+          />
+        )}
+        <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
       </div>
     </button>
   );
