@@ -127,7 +127,7 @@ const Index = () => {
         onAddCode={handleAddCode}
       />
 
-      <div className=" w-full absolute bottom-2">
+      <div className=" w-full fixed bottom-0 left-0 bg-background/95 backdrop-blur  border-t border-border p-4 flex justify-between items-center">
         <Button
           onClick={() => {
             localStorage.removeItem("javLink");
