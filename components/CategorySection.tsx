@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { CodeCard } from "./CodeCard";
+import axios from "axios";
 
 interface Code {
   id: string;
   code: string;
   link: string;
+  favorite?: boolean; // Optional field for favorite status
 }
 
 interface CategorySectionProps {
@@ -20,6 +22,29 @@ export const CategorySection = ({
   link,
 }: CategorySectionProps) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [codesState, setCodesState] = useState(codes);
+
+  const handleFavClick = async (code: string) => {
+    try {
+      const res = await axios.post("/api/javcode/fav", {
+        code,
+      });
+
+      if (res.status === 200) {
+        console.log("Favorite status updated successfully");
+        // update local state
+        const updatedCodes = codesState.map((c) => {
+          if (c.code === code) {
+            return { ...c, favorite: !c.favorite }; // Toggle favorite status
+          }
+          return c;
+        });
+        setCodesState(updatedCodes);
+      }
+    } catch (error) {
+      console.error("Failed to toggle favorite status:", error);
+    }
+  };
 
   return (
     <div className="mb-6">
@@ -40,8 +65,14 @@ export const CategorySection = ({
 
       {isOpen && (
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 px-2">
-          {codes.map((code) => (
-            <CodeCard key={code.id} code={code.code} link={link} />
+          {codesState.map((code) => (
+            <CodeCard
+              key={code.id}
+              code={code.code}
+              link={link}
+              fav={code.favorite}
+              onFavClick={handleFavClick}
+            />
           ))}
         </div>
       )}
