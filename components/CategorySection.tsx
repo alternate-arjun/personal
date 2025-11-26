@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { CodeCard } from "./CodeCard";
 import axios from "axios";
+import { toast } from "sonner";
 
 interface Code {
   id: string;
@@ -49,6 +50,24 @@ export const CategorySection = ({
     }
   };
 
+  const handleDeleteCode = async (code: string) => {
+    try {
+      const res = await axios.delete("/api/javcode", {
+        data: { code },
+      });
+
+      if (res.status === 200) {
+        console.log("Code deleted successfully");
+        // update local state
+        setCodesState((prev) => prev.filter((c) => c.code !== code));
+        toast.success("Code deleted successfully");
+      }
+    } catch (error) {
+      console.error("Failed to delete code:", error);
+      toast.error("Failed to delete code");
+    }
+  };
+
   return (
     <div className="mb-6">
       <button
@@ -75,6 +94,7 @@ export const CategorySection = ({
               link={link}
               fav={code.favorite}
               onFavClick={handleFavClick}
+              handleDeleteCode={handleDeleteCode}
             />
           ))}
         </div>
