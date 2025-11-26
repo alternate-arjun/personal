@@ -31,6 +31,14 @@ export const CodeCard = ({
 
   return (
     <button className="group relative bg-code-bg border border-code-border rounded-lg p-4 hover:bg-code-hover hover:border-primary/50 transition-all duration-200 text-left hover:cursor-pointer flex justify-between">
+      <div className=" flex space-x-4 items-center justify-center">
+        <Trash
+          onClick={() => {
+            handleDeleteCode(code);
+          }}
+          className="h-4 w-4 text-muted-foreground group-hover:text-red-500 transition-colors"
+        />
+      </div>
       <div onClick={handleClick} className="flex items-center justify-between">
         <code className="text-primary font-mono font-semibold text-lg">
           {code}
@@ -53,12 +61,6 @@ export const CodeCard = ({
             className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-"
           />
         )}
-        <Trash
-          onClick={() => {
-            handleDeleteCode(code);
-          }}
-          className="h-4 w-4 text-muted-foreground group-hover:text-red-500 transition-colors"
-        />
       </div>
     </button>
   );
