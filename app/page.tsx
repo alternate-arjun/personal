@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { REDIRECT_URL, REDIRECT_URL_STARTS_WITH } from "@/lib/config";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface Code {
   id: string;
@@ -35,7 +36,7 @@ const Index = () => {
     fetchCategories();
   }, []);
 
-  const handleAddCode = async (category: string, code: string) => {
+  const addCodeToCategory = async (category: string, code: string) => {
     try {
       const res = await axios.post("/api/javcode", {
         code,
@@ -44,7 +45,6 @@ const Index = () => {
 
       if (res.status === 200) {
         console.log("Code added successfully");
-        console.log(categories);
         setCategories((prev) =>
           prev.map((cat) =>
             cat.name === category
@@ -52,16 +52,36 @@ const Index = () => {
                   ...cat,
                   codeToLinks: [
                     ...cat.codeToLinks,
-                    {
-                      id: res.data.id,
-                      code,
-                      favorite: false,
-                    },
+                    { id: res.data.id, code, favorite: false },
                   ],
                 }
               : cat
           )
         );
+      }
+    } catch (error) {
+      console.error("Error adding code:", error);
+    }
+  };
+
+  const handleAddCode = async (category: string, code: string) => {
+    try {
+      const multipleCodes = code
+        .split(",")
+        .map((c) => c.trim())
+        .filter(Boolean);
+      if (multipleCodes.length === 0) {
+        toast.error("Please provide at least one code");
+        return;
+      }
+      if (multipleCodes.length > 1) {
+        for (const singleCode of multipleCodes) {
+          await addCodeToCategory(category, singleCode);
+        }
+        return;
+      } else {
+        await addCodeToCategory(category, code);
+        return;
       }
     } catch (error) {
       console.error("Error adding code:", error);
