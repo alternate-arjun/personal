@@ -104,6 +104,10 @@ const Index = () => {
     }
   };
 
+  const handleDeleteCode = async () => {
+    fetchCategories();
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b border-border sticky top-0 bg-background/95 backdrop-blur z-40">
@@ -150,6 +154,7 @@ const Index = () => {
                     ? link
                     : REDIRECT_URL
                 }
+                onDeleteCode={handleDeleteCode}
               />
             ))}
           </div>

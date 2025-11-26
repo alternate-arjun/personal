@@ -14,12 +14,14 @@ interface CategorySectionProps {
   title: string;
   codes: Code[];
   link: string; // Optional link prop if needed
+  onDeleteCode?: () => void;
 }
 
 export const CategorySection = ({
   title,
   codes,
   link,
+  onDeleteCode,
 }: CategorySectionProps) => {
   const [isOpen, setIsOpen] = useState(true);
   const [codesState, setCodesState] = useState(codes);
@@ -60,6 +62,7 @@ export const CategorySection = ({
         console.log("Code deleted successfully");
         // update local state
         setCodesState((prev) => prev.filter((c) => c.code !== code));
+        onDeleteCode && onDeleteCode();
         toast.success("Code deleted successfully");
       }
     } catch (error) {
